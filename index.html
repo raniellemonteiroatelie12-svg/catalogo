@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ateliê da Rani - Loja Online</title>
+    <style>
+        /* Estilos Gerais - Cores delicadas para o Ateliê */
+        :root {
+            --primary-color: #d88398; /* Rosa Ateliê */
+            --secondary-color: #fce4ec;
+            --text-color: #333;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #fafafa;
+            color: var(--text-color);
+        }
+
+        /* Cabeçalho e Carrossel */
+        header {
+            background-color: var(--primary-color);
+            color: var(--white);
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        .carousel-container {
+            position: relative;
+            max-width: 100%;
+            height: 300px; /* Altura do carrossel */
+            overflow: hidden;
+            background-color: #ddd;
+        }
+
+        .slide {
+            display: none;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .active-slide {
+            display: block;
+        }
+
+        /* Grade de Produtos */
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 15px;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .product-card {
+            background: var(--white);
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 15px;
+            text-align: center;
+            transition: transform 0.2s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .product-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 5px;
+            background-color: #eee;
+        }
+
+        .product-title {
+            font-size: 1.1em;
+            margin: 10px 0;
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        .product-price {
+            font-size: 1.2em;
+            color: #555;
+            margin-bottom: 15px;
+        }
+
+        .btn-add {
+            background-color: var(--primary-color);
+            color: var(--white);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1em;
+        }
+
+        .btn-add:hover {
+            background-color: #c06c80;
+        }
+
+        /* Carrinho Flutuante */
+        .cart-icon {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #25D366; /* Cor do WhatsApp */
+            color: white;
+            padding: 15px;
+            border-radius: 50%;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            cursor: pointer;
+            z-index: 1000;
+            font-size: 24px;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background-color: red;
+            color: white;
+            font-size: 12px;
+            padding: 4px 8px;
+            border-radius: 50%;
+        }
+
+        /* Modal do Carrinho */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1001;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid #eee;
+            padding: 10px 0;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box; /* Garante que o padding não estoure a largura */
+        }
+
+        .btn-checkout {
+            background-color: #25D366;
+            color: white;
+            border: none;
+            padding: 15px;
+            width: 100%;
+            border-radius: 5px;
+            font-size: 1.1em;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .close-modal {
+            float: right;
+            cursor: pointer;
+            font-size: 1.5em;
+            color: #999;
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Ateliê da Rani</h1>
+        <p>Bonecas de Pano e Cursos Artesanais</p>
+    </header>
+
+    <div class="carousel-container">
+        <img src="https://via.placeholder.com/1200x300/d88398/ffffff?text=Ateliê+da+Rani+-+Destaque+1" class="slide active-slide">
+        <img src="https://via.placeholder.com/1200x300/fce4ec/d88398?text=Nova+Coleção+de+Bonecas" class="slide">
+        <img src="https://via.placeholder.com/1200x300/d88398/ffffff?text=Curso+Vivendo+de+Bonecas" class="slide">
+    </div>
+
+    <div class="container">
+        <h2 style="text-align: center; color: var(--primary-color);">Nossos Produtos</h2>
+        <div class="products-grid" id="products-grid">
+            </div>
+    </div>
+
+    <div class="cart-icon" onclick="openCart()">
+        🛒
+        <span class="cart-count" id="cart-count">0</span>
+    </div>
+
+    <div class="modal" id="cart-modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeCart()">&times;</span>
+            <h2 style="text-align: center;">Seu Carrinho</h2>
+            
+            <div id="cart-items">
+                <p style="text-align: center;">Seu carrinho está vazio.</p>
+            </div>
+
+            <h3 style="text-align: right;">Total: R$ <span id="cart-total">0,00</span></h3>
+
+            <hr>
+            
+            <h3>Dados para Entrega</h3>
+            <div class="form-group">
+                <label for="client-name">Seu Nome:</label>
+                <input type="text" id="client-name" placeholder="Ex: Ranielle">
+            </div>
+            <div class="form-group">
+                <label for="client-address">Endereço Completo:</label>
+                <textarea id="client-address" rows="3" placeholder="Rua, Número, Bairro, Cidade, CEP"></textarea>
+            </div>
+
+            <button class="btn-checkout" onclick="checkoutWhatsApp()">Finalizar Pedido no WhatsApp</button>
+        </div>
+    </div>
+
+    <script>
+        // CONFIGURAÇÃO DOS PRODUTOS
+        // Edite abaixo os produtos do Ateliê da Rani
+        const products = [
+            { id: 1, name: "Boneca Clássica Personalizada", price: 150.00, image: "https://via.placeholder.com/300?text=Boneca+Classica" },
+            { id: 2, name: "Curso Vivendo de Bonecas", price: 297.00, image: "https://via.placeholder.com/300?text=Curso+Online" },
+            { id: 3, name: "Boneca Estilo Camponesa", price: 180.00, image: "https://via.placeholder.com/300?text=Camponesa" },
+            { id: 4, name: "Kit de Moldes", price: 50.00, image: "https://via.placeholder.com/300?text=Moldes" },
+            { id: 5, name: "Boneca para Decoração", price: 120.00, image: "https://via.placeholder.com/300?text=Decoracao" },
+        ];
+
+        let cart = [];
+        const whatsappNumber = "556284643873"; // Seu número configurado
+
+        // Renderizar Produtos
+        const grid = document.getElementById('products-grid');
+        products.forEach(product => {
+            const card = document.createElement('div');
+            card.className = 'product-card';
+            card.innerHTML = `
+                <img src="${product.image}" alt="${product.name}" class="product-img">
+                <div class="product-title">${product.name}</div>
+                <div class="product-price">R$ ${product.price.toFixed(2).replace('.', ',')}</div>
+                <button class="btn-add" onclick="addToCart(${product.id})">Adicionar ao Carrinho</button>
+            `;
+            grid.appendChild(card);
+        });
+
+        // Lógica do Carrossel
+        let slideIndex = 0;
+        const slides = document.querySelectorAll('.slide');
+        
+        function showSlides() {
+            slides.forEach(slide => slide.classList.remove('active-slide'));
+            slideIndex++;
+            if (slideIndex > slides.length) {slideIndex = 1}
+            slides[slideIndex - 1].classList.add('active-slide');
+            setTimeout(showSlides, 3000); // Muda a imagem a cada 3 segundos
+        }
+        showSlides();
+
+        // Funções do Carrinho
+        function addToCart(id) {
+            const product = products.find(p => p.id === id);
+            cart.push(product);
+            updateCartIcon();
+            alert(`${product.name} adicionado!`);
+        }
+
+        function updateCartIcon() {
+            document.getElementById('cart-count').innerText = cart.length;
+        }
+
+        function openCart() {
+            const modal = document.getElementById('cart-modal');
+            const cartItemsContainer = document.getElementById('cart-items');
+            const cartTotalElement = document.getElementById('cart-total');
+            
+            modal.style.display = 'flex';
+            cartItemsContainer.innerHTML = '';
+            
+            let total = 0;
+
+            if(cart.length === 0) {
+                cartItemsContainer.innerHTML = '<p style="text-align: center;">Seu carrinho está vazio.</p>';
+            } else {
+                cart.forEach((item, index) => {
+                    total += item.price;
+                    cartItemsContainer.innerHTML += `
+                        <div class="cart-item">
+                            <span>${item.name}</span>
+                            <span>R$ ${item.price.toFixed(2).replace('.', ',')}</span>
+                        </div>
+                    `;
+                });
+            }
+            cartTotalElement.innerText = total.toFixed(2).replace('.', ',');
+        }
+
+        function closeCart() {
+            document.getElementById('cart-modal').style.display = 'none';
+        }
+
+        // Finalizar no WhatsApp
+        function checkoutWhatsApp() {
+            if(cart.length === 0) {
+                alert("Seu carrinho está vazio!");
+                return;
+            }
+
+            const name = document.getElementById('client-name').value;
+            const address = document.getElementById('client-address').value;
+
+            if(!name || !address) {
+                alert("Por favor, preencha seu nome e endereço para continuar.");
+                return;
+            }
+
+            let message = `*Novo Pedido - Ateliê da Rani*%0A%0A`;
+            message += `*Cliente:* ${name}%0A`;
+            message += `*Endereço:* ${address}%0A%0A`;
+            message += `*Itens do Pedido:*%0A`;
+
+            let total = 0;
+            cart.forEach(item => {
+                message += `- ${item.name}: R$ ${item.price.toFixed(2).replace('.', ',')}%0A`;
+                total += item.price;
+            });
+
+            message += `%0A*Total: R$ ${total.toFixed(2).replace('.', ',')}*`;
+            message += `%0A%0AAguardo confirmação para pagamento!`;
+
+            const url = `https://wa.me/${whatsappNumber}?text=${message}`;
+            window.open(url, '_blank');
+        }
+
+        // Fechar modal ao clicar fora
+        window.onclick = function(event) {
+            const modal = document.getElementById('cart-modal');
+            if (event.target == modal) {
+                closeCart();
+            }
+        }
+    </script>
+</body>
+</html>
